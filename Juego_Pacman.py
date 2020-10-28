@@ -103,28 +103,35 @@ def world():
         tile = tiles[index]
         
         #Si el cuadro es 1 en tiles, se dibuja un cuadrado
-        if tile == 1:
+        if tile > 0:
             x = (index % 20) * 20 - 200
             y = 180 - (index // 20) * 20
             square(x, y)
-            path.up()
-            path.goto(x + 10, y + 10)
-            path.dot(2, 'white')
-                     
             
+            #Si el cuadro es 1 en tiles, dibuja un punto blanco (comida).
+            if tile == 1:
+                path.up()
+                path.goto(x + 10, y + 10)
+                path.dot(2, 'white')
+                     
 
 def move():
     "Move pacman and all ghosts."
+    #Se inicializa el marcador
     writer.undo()
     writer.write(state['score'])
 
     clear()
-
+    
+    #Se valida si la posición a la que se dirige pac-man esta dentro delo camino, si no es asi no se mueve.
     if valid(pacman + aim):
         pacman.move(aim)
 
+    #Regresa la posición actual de pac-man
     index = offset(pacman)
 
+    #Si en la posición actual de pac-man hay comida, se cambia el valor de esa posición a 2 en tiles para simular que ya no hay comida
+    #y se aumenta en 1 el marcador
     if tiles[index] == 1:
         tiles[index] = 2
         state['score'] += 1
@@ -132,13 +139,19 @@ def move():
         y = 180 - (index // 20) * 20
         square(x, y)
 
+    #Funcion que se encarga de dibujar a pac-man en cada posicion a la que se mueve
     up()
     goto(pacman.x + 10, pacman.y + 10)
     dot(20, 'yellow')
 
+    #Funcion que maneja el movimiento de los fantasmas
     for point, course in ghosts:
+        
+        #Se valida que exista camino hacia donde se dirige el fantasma
         if valid(point + course):
-            point.move(course)
+            point.move(course)       
+        elif valid(point - aim):
+            point.move(-aim)
         else:
             options = [
                 vector(5, 0),
@@ -148,37 +161,55 @@ def move():
             ]
             plan = choice(options)
             course.x = plan.x
-            course.y = plan.y
-
+            course.y = plan.y     
+                 
+            #point.move(course)
+        
+        #Si no es asi, toma una nueva dirección aleatoria       
+            
+       
+        #Funcion que se encarga de dibujar a los fantasmas en cada posicion a la que se mueven.
         up()
         goto(point.x + 10, point.y + 10)
         dot(20, 'red')
 
     update()
 
+    #Si la posición de pacman llega a chocar con la de los fantasmas, termina el juego.
     for point, course in ghosts:
         if abs(pacman - point) < 20:
             return
-
+    
+    #Controla la frecuencia en la que se realiza la función move(). Controla la velocidad de todo.
     ontimer(move, 100)
 
+#Determina si la dirección actual de pac-man puede ser modificada por las teclas. Esto dependiendo de si existe camino o no.
 def change(x, y):
     "Change pacman aim if valid."
     if valid(pacman + vector(x, y)):
         aim.x = x
         aim.y = y
 
+#Se crea la ventana de juego.
 setup(420, 420, 370, 0)
+
+#Se inicializa turtle
 hideturtle()
 tracer(False)
+
+#Se inicializa el marcador en la posición dada
 writer.goto(160, 160)
 writer.color('white')
 writer.write(state['score'])
 listen()
+
+#Claves de teclas para controlar el movimiento
 onkey(lambda: change(5, 0), 'Right')
 onkey(lambda: change(-5, 0), 'Left')
 onkey(lambda: change(0, 5), 'Up')
 onkey(lambda: change(0, -5), 'Down')
+
+#Se inicia el juego
 world()
 move()
 done()
