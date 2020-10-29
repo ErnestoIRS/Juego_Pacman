@@ -1,3 +1,5 @@
+#A00827434 Ernesto García González
+#A00827107 Regina González
 from random import choice
 from turtle import *
 from freegames import floor, vector
@@ -149,9 +151,13 @@ def move():
         
         #Se valida que exista camino hacia donde se dirige el fantasma
         if valid(point + course):
-            point.move(course)       
+            point.move(course)
+       
+        #Si el fantasma llega al final del camino cambia de dirección tomando como prioridad la dirección de pac-man
         elif valid(point + aim):
             point.move(aim)
+        
+        #Si no esta disponible esa dirección, toma un camino aleatoria pero aumenta de velocidad.
         else:
             options = [
                 vector(20, 0),
@@ -162,10 +168,7 @@ def move():
             plan = choice(options)
             course.x = plan.x
             course.y = plan.y     
-                 
-            #point.move(course)
-        
-        #Si no es asi, toma una nueva dirección aleatoria       
+                   
             
        
         #Funcion que se encarga de dibujar a los fantasmas en cada posicion a la que se mueven.
