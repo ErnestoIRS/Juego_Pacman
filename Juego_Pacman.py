@@ -1,5 +1,6 @@
 #A00827434 Ernesto García González
-#A00827107 Regina González
+#A00827107 Regina González Quijano
+
 from random import choice
 from turtle import *
 from freegames import floor, vector
@@ -7,19 +8,19 @@ from freegames import floor, vector
 #Variable que indica el puntaje.
 state = {'score': 0}
 
-#puntero que indica el camino que sigue pacman
+#Puntero que indica el camino que sigue pacman
 path = Turtle(visible=False)
 
-#puntero que indica en donde se va a mostrar el puntaje
+#Puntero que indica en donde se va a mostrar el puntaje
 writer = Turtle(visible=False)
 
 #Vector que indica la dirección de movimiento
 aim = vector(5, 0)
 
-#vector que indica la posición inicial de pac-man
+#Vector que indica la posición inicial de pac-man
 pacman = vector(-40, -80)
 
-#vectores que indican la posición inicial de los fantasmas
+#Vectores que indican la posición inicial de los fantasmas
 ghosts = [
     [vector(-180, 160), vector(5, 0)],
     [vector(-180, -160), vector(0, 5)],
@@ -76,7 +77,7 @@ def offset(point):
     index = int(x + y * 20)
     return index
 
-#funcion que valida si el punto indicado por la funcion offset es parte del camino o no
+#Función que valida si el punto indicado por la funcion offset es parte del camino o no
 def valid(point):
     "Return True if point is valid in tiles."
     index = offset(point)
@@ -94,9 +95,10 @@ def valid(point):
     #En caso de no cumplir las condiciones anteriores, regresa la posición dada inicialmente (true)
     return point.x % 20 == 0 or point.y % 20 == 0
 
+#Función que dibuja el juego
 def world():
     "Draw world using path."
-    #indica el color del camino y de las barreras
+    #Se indica el color del camino y de las barreras
     bgcolor('black')
     path.color('blue')
     
@@ -116,7 +118,7 @@ def world():
                 path.goto(x + 10, y + 10)
                 path.dot(2, 'white')
                      
-
+#Función para el movimiento del pacman y de los fantasmas
 def move():
     "Move pacman and all ghosts."
     #Se inicializa el marcador
@@ -141,12 +143,12 @@ def move():
         y = 180 - (index // 20) * 20
         square(x, y)
 
-    #Funcion que se encarga de dibujar a pac-man en cada posicion a la que se mueve
+    #Función que se encarga de dibujar a pac-man en cada posicion a la que se mueve
     up()
     goto(pacman.x + 10, pacman.y + 10)
     dot(20, 'yellow')
 
-    #Funcion que maneja el movimiento de los fantasmas
+    #Función que maneja el movimiento de los fantasmas
     for point, course in ghosts:
         
         #Se valida que exista camino hacia donde se dirige el fantasma
@@ -169,8 +171,6 @@ def move():
             course.x = plan.x
             course.y = plan.y     
                    
-            
-       
         #Funcion que se encarga de dibujar a los fantasmas en cada posicion a la que se mueven.
         up()
         goto(point.x + 10, point.y + 10)
