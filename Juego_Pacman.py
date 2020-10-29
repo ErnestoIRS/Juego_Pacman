@@ -150,8 +150,8 @@ def move():
         #Se valida que exista camino hacia donde se dirige el fantasma
         if valid(point + course):
             point.move(course)       
-        elif valid(point - aim):
-            point.move(-aim)
+        elif valid(point + aim):
+            point.move(aim)
         else:
             options = [
                 vector(20, 0),
@@ -181,7 +181,7 @@ def move():
             return
     
     #Controla la frecuencia en la que se realiza la función move(). Controla la velocidad de todo.
-    ontimer(move, 100)
+    ontimer(move, 50)
 
 #Determina si la dirección actual de pac-man puede ser modificada por las teclas. Esto dependiendo de si existe camino o no.
 def change(x, y):
